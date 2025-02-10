@@ -1,0 +1,75 @@
+apiVersion: sparkoperator.k8s.io/v1beta2
+kind: SparkApplication
+metadata:
+  name: spark-write-minio
+  namespace: data-platform
+spec:
+  type: Python
+  pythonVersion: "3"
+  mode: cluster
+  image: spark-custom:3.5.3
+  imagePullPolicy: Always
+  mainApplicationFile: local:///app/generate_data.py
+  sparkVersion: 3.5.3
+  restartPolicy:
+    type: OnFailure
+    onFailureRetries: 3
+    onFailureRetryInterval: 10
+    onSubmissionFailureRetries: 5
+    onSubmissionFailureRetryInterval: 20
+  driver:
+    cores: 1
+    memory: "512m"
+    labels:
+      version: 3.5.3
+    serviceAccount: spark-operator-spark
+    env:
+      - name: AWS_REGION
+        valueFrom:
+          secretKeyRef:
+            name: minio-secret
+            key: AWS_REGION
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: minio-secret
+            key: AWS_ACCESS_KEY_ID
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: minio-secret
+            key: AWS_SECRET_ACCESS_KEY
+      - name: ENDPOINT
+        valueFrom:
+          secretKeyRef:
+            name: minio-secret
+            key: ENDPOINT
+  executor:
+    cores: 1
+    instances: 2
+    memory: "512m"
+    labels:
+      version: 3.5.3
+    env:
+      # - name: OUTPUT_PATH
+      #   value: s3a://mybucket/user_data
+      - name: AWS_REGION
+        valueFrom:
+          secretKeyRef:
+            name: minio-secret
+            key: AWS_REGION
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: minio-secret
+            key: AWS_ACCESS_KEY_ID
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: minio-secret
+            key: AWS_SECRET_ACCESS_KEY
+      - name: ENDPOINT
+        valueFrom:
+          secretKeyRef:
+            name: minio-secret
+            key: ENDPOINT
