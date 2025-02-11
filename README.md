@@ -54,4 +54,10 @@ curl -sLo infra/services/spark/values.yaml https://raw.githubusercontent.com/kub
 # Install Spark Operator and build Spark application base image
 make -f scripts/spark/Makefile install
 make -f scripts/spark/Makefile build-spark-application-dockerfile
+
+# Running a Spark application to write file to MinIO with Delta Lake table format
+make -f scripts/spark/Makefile build-spark-write-minio-dockerfile
+k apply -f pipeline/spark-write-minio/job.yaml
+
+# Go to https://localhost:9443/browser/mybucket/user_data to view data files
 ```
