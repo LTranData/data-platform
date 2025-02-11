@@ -50,5 +50,7 @@ generate-self-signed-cert:
 
 register-self-signed-cert:
 	@set -e; set -x; \
-	kubectl create secret generic operator-ca-tls \
-		--from-file=scripts/minio/selfsigned.crt --namespace $(NAMESPACE)
+	kubectl create secret tls minio-selfsigned-secret \
+		--key scripts/minio/selfsigned.key \
+		--cert scripts/minio/selfsigned.crt \
+		--namespace $(NAMESPACE)

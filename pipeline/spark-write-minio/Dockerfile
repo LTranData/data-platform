@@ -28,3 +28,9 @@ RUN chmod -R 644 $SPARK_HOME/jars/*
 
 # Copy main application
 COPY pipeline/spark-write-minio/generate_data.py .
+
+# Certificate import
+COPY scripts/minio/selfsigned.crt /etc/ssl/certs/
+RUN keytool -importcert -alias minio-ca -file /etc/ssl/certs/selfsigned.crt \
+    -keystore $JAVA_HOME/lib/security/cacerts \
+    -storepass changeit -noprompt

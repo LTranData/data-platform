@@ -4,7 +4,6 @@ from faker import Faker
 import random
 import os
 
-# Initialize Spark Session with Delta Lake support
 spark: SparkSession = SparkSession.builder.enableHiveSupport().getOrCreate()
 
 # MinIO configuration
@@ -60,6 +59,5 @@ df.repartition(1) \
     .mode("append") \
     .save("s3a://mybucket/user_data")
 
-print("Sample data from Delta table:")
 df.show(10, truncate=False)
 print("Number of records: ", df.count())
