@@ -30,6 +30,7 @@ build-spark-write-minio-dockerfile:
 	docker build --progress=plain \
 		-t spark-write-minio:3.5.3 \
 		-f pipeline/spark-write-minio/Dockerfile .; \
+	kubectl delete secret minio-secret --namespace $(NAMESPACE); \
 	kubectl create secret generic minio-secret \
 		--from-literal=AWS_ACCESS_KEY_ID=minio \
 		--from-literal=AWS_SECRET_ACCESS_KEY=minio123 \

@@ -50,6 +50,7 @@ generate-self-signed-cert:
 
 register-self-signed-cert:
 	@set -e; set -x; \
+	kubectl delete secret minio-selfsigned-secret --namespace $(NAMESPACE); \
 	kubectl create secret tls minio-selfsigned-secret \
 		--key scripts/minio/selfsigned.key \
 		--cert scripts/minio/selfsigned.crt \
