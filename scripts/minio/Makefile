@@ -34,24 +34,19 @@ uninstall-tenant:
 
 generate-self-signed-cert:
 	@set -e; set -x; \
-	openssl req -new -nodes \
-		-newkey rsa:2048 \
-		-keyout scripts/minio/selfsigned.key \
-		-out scripts/minio/selfsigned.csr \
-		-config scripts/minio/openssl.conf; \
-	openssl x509 -req \
-		-in scripts/minio/selfsigned.csr \
-		-signkey scripts/minio/selfsigned.key \
+	openssl req -new -x509 -nodes -days 730 -keyout scripts/minio/selfsigned.key \
 		-out scripts/minio/selfsigned.crt \
-		-days 365 \
-		-sha256 \
-		-extfile scripts/minio/openssl.conf \
-		-extensions req_ext
+		-config scripts/minio/openssl.conf
 
 register-self-signed-cert:
 	@set -e; set -x; \
-	kubectl delete secret minio-selfsigned-secret --namespace $(NAMESPACE); \
+	kubectl delete secret minio-selfsigned-secret --namespace $(NAMESPACE) || true; \
 	kubectl create secret tls minio-selfsigned-secret \
 		--key scripts/minio/selfsigned.key \
 		--cert scripts/minio/selfsigned.crt \
+		--namespace $(NAMESPACE); \
+	kubectl delete secret operator-ca-tls --namespace $(NAMESPACE) || true; \
+	kubectl create secret generic operator-ca-tls \
+   		--from-file=public.crt=scripts/minio/selfsigned.crt \
+		--from-file=private.key=scripts/minio/selfsigned.key \
 		--namespace $(NAMESPACE)

@@ -29,6 +29,7 @@ make -f scripts/minio/Makefile install
 k port-forward service/myminio-hl 9000 -n data-platform &
 k port-forward service/myminio-console 9443 -n data-platform &
 
+# Because we are using the Self-signed certificate, hence specify flag --insecure here
 # Alias for Tenant service
 mc alias set myminio https://localhost:9000 minio minio123 --insecure
 
