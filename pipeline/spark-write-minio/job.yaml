@@ -4,10 +4,13 @@ metadata:
   name: spark-write-minio
   namespace: data-platform
 spec:
+  sparkConf:
+    spark.sql.extensions: io.delta.sql.DeltaSparkSessionExtension
+    spark.sql.catalog.spark_catalog: org.apache.spark.sql.delta.catalog.DeltaCatalog
   type: Python
   pythonVersion: "3"
   mode: cluster
-  image: spark-custom:3.5.3
+  image: spark-write-minio:3.5.3
   imagePullPolicy: Always
   mainApplicationFile: local:///app/generate_data.py
   sparkVersion: 3.5.3

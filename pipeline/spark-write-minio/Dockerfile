@@ -1,34 +1,33 @@
-#
-# Licensed to the Apache Software Foundation (ASF) under one or more
-# contributor license agreements.  See the NOTICE file distributed with
-# this work for additional information regarding copyright ownership.
-# The ASF licenses this file to You under the Apache License, Version 2.0
-# (the "License"); you may not use this file except in compliance with
-# the License.  You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-FROM spark:3.5.3-scala2.12-java11-ubuntu
+FROM spark-application:3.5.3
 
 USER root
-
-RUN set -ex; \
-    apt-get update; \
-    apt-get install -y python3 python3-pip; \
-    rm -rf /var/lib/apt/lists/*
-
 WORKDIR /app
 
-COPY requirements.txt /app/
+# Add Delta Lake
+ADD https://repo1.maven.org/maven2/io/delta/delta-spark_2.12/3.3.0/delta-spark_2.12-3.3.0.jar $SPARK_HOME/jars
+# Add AWS jars
+ADD https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.4/hadoop-aws-3.3.4.jar $SPARK_HOME/jars
+ADD https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.172/aws-java-sdk-bundle-1.12.172.jar $SPARK_HOME/jars
+ADD https://repo1.maven.org/maven2/software/amazon/awssdk/bundle/2.17.257/bundle-2.17.257.jar $SPARK_HOME/jars
+ADD https://repo1.maven.org/maven2/software/amazon/awssdk/url-connection-client/2.17.257/url-connection-client-2.17.257.jar $SPARK_HOME/jars
+# Support for S3 magic committer...
+ADD https://repo1.maven.org/maven2/org/apache/spark/spark-hadoop-cloud_2.12/3.3.4/spark-hadoop-cloud_2.12-3.3.4.jar $SPARK_HOME/jars
 
+RUN apt-get update && \
+    apt install -y python3 python3-pip && \
+    pip3 install --upgrade pip setuptools && \
+    # Removed the .cache to save space
+    rm -rf /root/.cache && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/*
+
+# Install Python libraries
+COPY pipeline/spark-write-minio/requirements.txt .
 RUN pip3 install -r /app/requirements.txt
 
-COPY generate_data.py /app/
+# Copy main application
+COPY pipeline/spark-write-minio/generate_data.py .
 
-USER spark
+ENTRYPOINT [ "/opt/entrypoint.sh" ]
+
+# Specify the User that the actual main process will run as
+ARG spark_uid=185
+USER ${spark_uid}
