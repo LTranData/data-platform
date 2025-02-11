@@ -21,6 +21,7 @@ curl -sLo infra/services/minio/operator/values.yaml https://raw.githubuserconten
 
 # Download tenant config
 curl -sLo infra/services/minio/tenant/values.yaml https://raw.githubusercontent.com/minio/operator/master/helm/tenant/values.yaml
+# Make sure you configure `externalCertSecret` and `requestAutoCert` so that the server use Self-signed certificate instead of auto-generated certificate
 
 # Install server
 make -f scripts/minio/Makefile generate-self-signed-cert
