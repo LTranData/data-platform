@@ -11,7 +11,7 @@ spec:
   pythonVersion: "3"
   mode: cluster
   image: spark-write-minio:3.5.3
-  imagePullPolicy: Always
+  imagePullPolicy: IfNotPresent
   mainApplicationFile: local:///app/generate_data.py
   sparkVersion: 3.5.3
   restartPolicy:
