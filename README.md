@@ -23,6 +23,8 @@ curl -sLo infra/services/minio/operator/values.yaml https://raw.githubuserconten
 curl -sLo infra/services/minio/tenant/values.yaml https://raw.githubusercontent.com/minio/operator/master/helm/tenant/values.yaml
 
 # Install server
+make -f scripts/minio/Makefile generate-self-signed-cert
+make -f scripts/minio/Makefile register-self-signed-cert
 make -f scripts/minio/Makefile install
 
 # Port forward for MinIO service and set up alias, & is to run it in background
@@ -35,10 +37,6 @@ mc alias set myminio https://localhost:9000 minio minio123 --insecure
 
 # Create a bucket
 mc mb myminio/mybucket --insecure
-
-# Try upload some files to MinIO bucket
-# CA certificate in pod: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-# sudo keytool -importcert -alias MinIO_Cert -file ca.crt -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit
 ```
 
 ## Install Spark cluster
@@ -52,5 +50,7 @@ helm repo update
 # Download Spark config
 curl -sLo infra/services/spark/values.yaml https://raw.githubusercontent.com/kubeflow/spark-operator/refs/heads/master/charts/spark-operator-chart/values.yaml
 
+# Install Spark Operator and build Spark application base image
 make -f scripts/spark/Makefile install
+make -f scripts/spark/Makefile build-spark-application-dockerfile
 ```
