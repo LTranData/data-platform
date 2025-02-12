@@ -61,3 +61,21 @@ k apply -f pipeline/spark-write-minio/job.yaml
 
 # Go to https://localhost:9443/browser/mybucket/user_data to view data files
 ```
+
+## Install Airflow
+
+```bash
+helm repo add apache-airflow https://airflow.apache.org
+helm search repo apache-airflow
+helm repo update
+
+# Download Airflow config
+curl -sLo infra/services/airflow/operator/values.yaml https://raw.githubusercontent.com/apache/airflow/refs/heads/main/chart/values.yaml
+
+# Install Airflow Operator
+make -f scripts/airflow/Makefile build-custom-dockerfile
+make -f scripts/airflow/Makefile install
+
+# Port forward for Airflow webserver
+k port-forward service/airflow-operator-webserver 8080 -n data-platform &
+```

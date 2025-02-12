@@ -1,6 +1,7 @@
 # Makefile for Spark deployment
 
 NAMESPACE ?= data-platform
+SPARK_OPERATOR ?= spark-operator/spark-operator
 
 # Optional targets for specific components
 .PHONY: install uninstall build-spark-application-dockerfile build-spark-write-minio-dockerfile
@@ -9,7 +10,7 @@ install:
 	@set -e; set -x; \
 	helm upgrade --install --namespace $(NAMESPACE) \
 		--values infra/services/spark/operator/values.yaml \
-    	spark-operator spark-operator/spark-operator
+    	spark-operator $(SPARK_OPERATOR)
 
 uninstall:
 	@set -e; set -x; \
@@ -36,4 +37,4 @@ build-spark-write-minio-dockerfile:
 		--from-literal=AWS_SECRET_ACCESS_KEY=minio123 \
 		--from-literal=ENDPOINT=https://myminio-hl.data-platform.svc.cluster.local:9000 \
 		--from-literal=AWS_REGION=us-east-1 \
-		--namespace data-platform
+		--namespace $(NAMESPACE)
