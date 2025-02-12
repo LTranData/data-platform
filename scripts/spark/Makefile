@@ -4,32 +4,32 @@ NAMESPACE ?= data-platform
 SPARK_OPERATOR ?= spark-operator/spark-operator
 
 # Optional targets for specific components
-.PHONY: install uninstall build-spark-application-dockerfile build-spark-write-minio-dockerfile
+.PHONY: install uninstall build-spark-application-dockerfile build-spark-write-minio-dockerfile release-docker-images
 
 install:
-	@set -e; set -x; \
+	@set -ex; \
 	helm upgrade --install --namespace $(NAMESPACE) \
 		--values infra/services/spark/operator/values.yaml \
     	spark-operator $(SPARK_OPERATOR)
 
 uninstall:
-	@set -e; set -x; \
+	@set -ex; \
 	helm uninstall --namespace $(NAMESPACE) \
 		spark-operator
 
 build-spark-application-dockerfile:
-	@set -e; set -x; \
+	@set -ex; \
 	export EXISTING_PWD=$(pwd); \
 	cd $(SPARK_HOME); \
 	docker build --progress=plain \
-		-t spark-application:3.5.3 \
+		-t lam1051999/spark-application:3.5.3 \
 		-f kubernetes/dockerfiles/spark/Dockerfile .; \
 	cd $(EXISTING_PWD)
 
 build-spark-write-minio-dockerfile:
-	@set -e; set -x; \
+	@set -ex; \
 	docker build --progress=plain \
-		-t spark-write-minio:3.5.3 \
+		-t lam1051999/spark-write-minio:3.5.3 \
 		-f pipeline/spark-write-minio/Dockerfile .; \
 	kubectl delete secret minio-secret --namespace $(NAMESPACE) || true; \
 	kubectl create secret generic minio-secret \
@@ -38,3 +38,8 @@ build-spark-write-minio-dockerfile:
 		--from-literal=ENDPOINT=https://myminio-hl.data-platform.svc.cluster.local:9000 \
 		--from-literal=AWS_REGION=us-east-1 \
 		--namespace $(NAMESPACE)
+
+release-docker-images:
+	@set -ex; \
+	docker push lam1051999/spark-application:3.5.3; \
+	docker push lam1051999/spark-write-minio:3.5.3

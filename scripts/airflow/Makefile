@@ -4,16 +4,16 @@ NAMESPACE ?= data-platform
 AIRFLOW_OPERATOR ?= apache-airflow/airflow
 
 # Optional targets for specific components
-.PHONY: build-custom-dockerfile install uninstall
+.PHONY: build-custom-dockerfile install uninstall release-docker-images
 
 build-custom-dockerfile:
-	@set -e; set -x; \
+	@set -ex; \
 	docker build --progress=plain \
-		-t airflow-custom:2.10.5 \
+		-t lam1051999/airflow-custom:2.10.5 \
 		-f infra/services/airflow/operator/Dockerfile .
 
 install:
-	@set -e; set -x; \
+	@set -ex; \
 	kubectl delete secret my-webserver-secret --namespace $(NAMESPACE) || true; \
 	kubectl create secret generic my-webserver-secret \
 		--from-literal="webserver-secret-key=$(python3 -c 'import secrets; print(secrets.token_hex(16))')" \
@@ -32,12 +32,16 @@ install:
 		--set triggerer.safeToEvict=true \
 		--set dagProcessor.safeToEvict=true \
 		--set redis.safeToEvict=true \
-		--set images.airflow.repository=airflow-custom \
+		--set images.airflow.repository=lam1051999/airflow-custom \
 		--set images.airflow.tag=2.10.5 \
 		--set webserver.defaultUser.username=admin \
 		--set webserver.defaultUser.password=admin
 
 uninstall:
-	@set -e; set -x; \
+	@set -ex; \
 	helm uninstall --namespace $(NAMESPACE) \
 		airflow-operator
+
+release-docker-images:
+	@set -ex; \
+	docker push lam1051999/airflow-custom:2.10.5

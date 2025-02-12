@@ -11,35 +11,35 @@ install: install-operator install-tenant
 uninstall: uninstall-operator uninstall-tenant
 
 install-operator:
-	@set -e; set -x; \
+	@set -ex; \
 	helm upgrade --install --namespace $(NAMESPACE) \
 		--values infra/services/minio/operator/values.yaml \
 		minio-operator $(MINIO_OPERATOR)
 
 install-tenant:
-	@set -e; set -x; \
+	@set -ex; \
 	helm upgrade --install --namespace $(NAMESPACE) \
 		--values infra/services/minio/tenant/values.yaml \
 		minio-tenant $(MINIO_TENANT)
 
 uninstall-operator:
-	@set -e; set -x; \
+	@set -ex; \
 	helm uninstall --namespace $(NAMESPACE) \
 		minio-operator
 
 uninstall-tenant:
-	@set -e; set -x; \
+	@set -ex; \
 	helm uninstall --namespace $(NAMESPACE) \
 		minio-tenant
 
 generate-self-signed-cert:
-	@set -e; set -x; \
+	@set -ex; \
 	openssl req -new -x509 -nodes -days 730 -keyout scripts/minio/selfsigned.key \
 		-out scripts/minio/selfsigned.crt \
 		-config scripts/minio/openssl.conf
 
 register-self-signed-cert:
-	@set -e; set -x; \
+	@set -ex; \
 	kubectl delete secret minio-selfsigned-secret --namespace $(NAMESPACE) || true; \
 	kubectl create secret tls minio-selfsigned-secret \
 		--key scripts/minio/selfsigned.key \
