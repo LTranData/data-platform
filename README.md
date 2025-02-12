@@ -97,6 +97,7 @@ make -f scripts/hive/Makefile build-schematool-custom-dockerfile
 make -f scripts/hive/Makefile release-docker-images
 make -f scripts/hive/Makefile install
 
-# Port forward for Hive metastore database
+# Port forward for Hive metastore database and thrift
 k port-forward service/hive-metastore-postgres-postgresql 5432 -n data-platform &
+k port-forward service/hive-metastore 9083 -n data-platform &
 ```
