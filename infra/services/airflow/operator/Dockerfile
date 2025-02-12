@@ -10,5 +10,6 @@ RUN apt-get update \
 
 USER airflow
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+
 COPY infra/services/airflow/operator/requirements.txt /
 RUN pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" -r /requirements.txt
