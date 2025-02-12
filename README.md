@@ -92,7 +92,7 @@ Reference: https://christiaan-viljoen.medium.com/how-to-deploy-a-minimal-apache-
 curl -sLo infra/services/hive/database/values.yaml https://raw.githubusercontent.com/bitnami/charts/refs/heads/main/bitnami/postgresql/values.yaml
 
 # Install Hive metastore
-make -f scripts/hive/Makefile build-metastore-custom-dockerfile 
+make -f scripts/hive/Makefile build-metastore-custom-dockerfile
 make -f scripts/hive/Makefile build-schematool-custom-dockerfile
 make -f scripts/hive/Makefile release-docker-images
 make -f scripts/hive/Makefile install
