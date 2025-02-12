@@ -41,5 +41,5 @@ COPY infra/services/hive/metastore/conf/metastore-site.xml /opt/hive-metastore/c
 COPY scripts/minio/selfsigned.crt /usr/local/share/ca-certificates/
 RUN update-ca-certificates
 RUN keytool -importcert -alias minio-ca -file /usr/local/share/ca-certificates/selfsigned.crt \
-    -keystore $JAVA_HOME/lib/security/cacerts \
+    -keystore $JAVA_HOME/jre/lib/security/cacerts \
     -storepass changeit -noprompt
