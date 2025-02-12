@@ -18,6 +18,5 @@ with DAG(
         task_id="spark-job",
         application_file="spark/spark-write-minio.yaml",
         namespace="data-platform",
-        kubernetes_conn_id="kubernetes_default",
-        do_xcom_push=True
+        kubernetes_conn_id="kubernetes_default"
     )

@@ -4,7 +4,7 @@ NAMESPACE ?= data-platform
 AIRFLOW_OPERATOR ?= apache-airflow/airflow
 
 # Optional targets for specific components
-.PHONY: build-custom-dockerfile install uninstall release-docker-images
+.PHONY: build-custom-dockerfile install uninstall release-docker-images create-clusterrolebinding-for-spark-applications
 
 build-custom-dockerfile:
 	@set -ex; \
@@ -45,3 +45,10 @@ uninstall:
 release-docker-images:
 	@set -ex; \
 	docker push lam1051999/airflow-custom:2.10.5
+
+create-clusterrolebinding-for-spark-applications:
+	@set -ex; \
+	kubectl create clusterrolebinding default-admin \
+		--clusterrole cluster-admin \
+		--serviceaccount=$(NAMESPACE):airflow-operator-worker \
+		--namespace $(NAMESPACE)
