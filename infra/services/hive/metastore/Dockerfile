@@ -28,6 +28,9 @@ RUN curl https://archive.apache.org/dist/hive/hive-standalone-metastore-3.0.0/hi
 ADD https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.3/postgresql-42.7.3.jar /opt/hadoop/share/hadoop/common/lib/
 ADD https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.3/postgresql-42.7.3.jar /opt/hive-metastore/lib
 
+# For org.apache.hadoop.hive.ql.optimizer.ppr.PartitionExpressionForMetastore
+ADD https://repo1.maven.org/maven2/org/apache/hive/hive-exec/3.0.0/hive-exec-3.0.0.jar /opt/hive-metastore/lib
+
 # Add customized configuration
 COPY infra/services/hive/metastore/conf/entrypoint.sh /opt/
 COPY infra/services/hive/metastore/conf/bootstrap.sh /opt/
