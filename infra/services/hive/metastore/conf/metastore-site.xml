@@ -28,7 +28,7 @@
     </property>
     <property>
         <name>metastore.warehouse.dir</name>
-        <value>$S3_WAREHOUSE_DIR</value>
+        <value>$S3_WAREHOUSE_DIR/data/</value>
     </property>
     <property>
         <name>metastore.thrift.port</name>
