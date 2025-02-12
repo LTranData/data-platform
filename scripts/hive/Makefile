@@ -22,7 +22,7 @@ install:
 	@set -ex; \
 	kubectl delete secret hive-metastore-secret --namespace $(NAMESPACE) || true; \
 	kubectl create secret generic hive-metastore-secret \
-		--from-literal=POSTGRES_URL=jdbc:postgresql://hive-metastore-postgres-postgresql.data-platform.svc.cluster.local:5432/metastore \
+		--from-literal=POSTGRES_URL=jdbc:postgresql://hive-metastore-postgres-postgresql.data-platform.svc.cluster.local:5432/postgres \
 		--from-literal=POSTGRES_USERNAME=postgres \
 		--from-literal=POSTGRES_PASSWORD=postgres \
 		--from-literal=S3_WAREHOUSE_DIR=s3a://hive-warehouse \
@@ -30,16 +30,16 @@ install:
 	helm upgrade --install --namespace $(NAMESPACE) \
 		hive-metastore-postgres $(POSTGRES_OPERATOR) \
 		--set global.postgresql.auth.postgresPassword=postgres \
-		--set global.postgresql.auth.database=metastore; \
-	kubectl apply -f infra/services/hive/schematool/job.yaml; \
-	kubectl apply -f infra/services/hive/metastore/deployment.yaml; \
-	kubectl apply -f infra/services/hive/metastore/service.yaml
+		--set global.postgresql.auth.database=postgres; \
+	kubectl apply -f infra/services/hive/schematool/job.yaml --namespace $(NAMESPACE); \
+	kubectl apply -f infra/services/hive/metastore/deployment.yaml --namespace $(NAMESPACE); \
+	kubectl apply -f infra/services/hive/metastore/service.yaml --namespace $(NAMESPACE)
 
 uninstall:
 	@set -ex; \
-	kubectl delete -f infra/services/hive/metastore/service.yaml; \
-	kubectl delete -f infra/services/hive/metastore/deployment.yaml; \
-	kubectl delete -f infra/services/hive/schematool/job.yaml; \
+	kubectl delete -f infra/services/hive/metastore/service.yaml --namespace $(NAMESPACE); \
+	kubectl delete -f infra/services/hive/metastore/deployment.yaml --namespace $(NAMESPACE); \
+	kubectl delete -f infra/services/hive/schematool/job.yaml --namespace $(NAMESPACE); \
 	helm uninstall --namespace $(NAMESPACE) \
 		hive-metastore-postgres
 

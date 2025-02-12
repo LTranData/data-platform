@@ -59,5 +59,4 @@ spec:
                 secretKeyRef:
                   name: hive-metastore-secret
                   key: S3_WAREHOUSE_DIR
-          command: ["/opt/hive-metastore/bin/start-metastore"]
-          args: ["-p", "9083"]
+          command: ["/opt/entrypoint.sh"]

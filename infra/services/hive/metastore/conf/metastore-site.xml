@@ -17,6 +17,7 @@
     <property>
         <name>javax.jdo.option.ConnectionPassword</name>
         <value>$POSTGRES_PASSWORD</value>
+    </property>
     <property>
         <name>metastore.warehouse.dir</name>
         <value>$S3_WAREHOUSE_DIR</value>

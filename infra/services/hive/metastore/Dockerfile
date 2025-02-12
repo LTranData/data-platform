@@ -29,8 +29,7 @@ ADD https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.3/postgresql-4
 ADD https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.3/postgresql-42.7.3.jar /opt/hive-metastore/lib
 
 # Add customized configuration
+COPY infra/services/hive/metastore/conf/entrypoint.sh /opt/
 COPY infra/services/hive/metastore/conf/bootstrap.sh /opt/
 COPY infra/services/hive/metastore/conf/core-site.xml /opt/hadoop/etc/hadoop/
 COPY infra/services/hive/metastore/conf/metastore-site.xml /opt/hive-metastore/conf/
-
-ENTRYPOINT ["/opt/bootstrap.sh"]

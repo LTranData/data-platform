@@ -8,10 +8,10 @@ spec:
       labels:
         app: hive-schema-init
     spec:
+      restartPolicy: Never
       containers:
       - name: hive-schema-init
         image: lam1051999/hive-schematool-custom:4.0.0
-        restartPolicy: Never
         command: ["/bin/sh", "-c"]
         env:    
           - name: POSTGRES_URL
@@ -33,4 +33,4 @@ spec:
         - |
           /opt/hive/bin/schematool --verbose -initSchema -dbType postgres \
           -driver org.postgresql.Driver -userName "$POSTGRES_USERNAME" -passWord "$POSTGRES_PASSWORD" \
-          -url "$POSTGRES_URL?user=$POSTGRES_USERNAME&password=$POSTGRES_PASSWORD&createDatabaseIfNotExist=true
+          -url "$POSTGRES_URL?user=$POSTGRES_USERNAME&password=$POSTGRES_PASSWORD&createDatabaseIfNotExist=true"
