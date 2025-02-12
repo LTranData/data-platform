@@ -1,4 +1,4 @@
-# Makefile for MinIO deployment
+# Makefile for Airflow deployment
 
 NAMESPACE ?= data-platform
 AIRFLOW_OPERATOR ?= apache-airflow/airflow

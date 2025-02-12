@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+    <property>
+        <name>javax.jdo.option.ConnectionDriverName</name>
+        <value>org.postgresql.Driver</value>
+    </property>
+    <property>
+        <name>javax.jdo.option.ConnectionURL</name>
+        <value>$POSTGRES_URL</value>
+    </property>
+    <property>
+        <name>javax.jdo.option.ConnectionUserName</name>
+        <value>$POSTGRES_USERNAME</value>
+    </property>
+    <property>
+        <name>javax.jdo.option.ConnectionPassword</name>
+        <value>$POSTGRES_PASSWORD</value>
+    <property>
+        <name>metastore.warehouse.dir</name>
+        <value>$S3_WAREHOUSE_DIR</value>
+    </property>
+    <property>
+        <name>metastore.thrift.port</name>
+        <value>9083</value>
+    </property>
+</configuration>

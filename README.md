@@ -38,6 +38,7 @@ mc alias set myminio https://localhost:9000 minio minio123 --insecure
 
 # Create a bucket
 mc mb myminio/mybucket --insecure
+mc mb myminio/hive-warehouse --insecure
 ```
 
 ## Install Spark cluster
@@ -57,6 +58,7 @@ make -f scripts/spark/Makefile build-spark-application-dockerfile
 
 # Running a Spark application to write file to MinIO with Delta Lake table format
 make -f scripts/spark/Makefile build-spark-write-minio-dockerfile
+make -f scripts/spark/Makefile release-docker-images
 k apply -f pipeline/spark-write-minio/job.yaml
 
 # Go to https://localhost:9443/browser/mybucket/user_data to view data files
@@ -74,8 +76,24 @@ curl -sLo infra/services/airflow/operator/values.yaml https://raw.githubusercont
 
 # Install Airflow Operator
 make -f scripts/airflow/Makefile build-custom-dockerfile
+make -f scripts/airflow/Makefile release-docker-images
 make -f scripts/airflow/Makefile install
 
 # Port forward for Airflow webserver
 k port-forward service/airflow-operator-webserver 8080 -n data-platform &
+```
+
+## Install Hive metastore
+
+Reference: https://christiaan-viljoen.medium.com/how-to-deploy-a-minimal-apache-hive-standalone-metastore-to-enable-delta-lake-support-for-trino-on-6b03964882a2
+
+```bash
+# Download Postgres config
+curl -sLo infra/services/hive/database/values.yaml https://raw.githubusercontent.com/bitnami/charts/refs/heads/main/bitnami/postgresql/values.yaml
+
+# Install Hive metastore
+make -f scripts/hive/Makefile build-metastore-custom-dockerfile 
+make -f scripts/hive/Makefile build-schematool-custom-dockerfile
+make -f scripts/hive/Makefile release-docker-images
+make -f scripts/hive/Makefile install
 ```
