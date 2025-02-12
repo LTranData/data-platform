@@ -33,4 +33,5 @@ spec:
         - |
           /opt/hive/bin/schematool --verbose -initSchema -dbType postgres \
           -driver org.postgresql.Driver -userName "$POSTGRES_USERNAME" -passWord "$POSTGRES_PASSWORD" \
-          -url "$POSTGRES_URL?user=$POSTGRES_USERNAME&password=$POSTGRES_PASSWORD&createDatabaseIfNotExist=true"
+          -url "$POSTGRES_URL?user=$POSTGRES_USERNAME&password=$POSTGRES_PASSWORD&createDatabaseIfNotExist=true" \
+          -upgradeSchema

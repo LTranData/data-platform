@@ -36,3 +36,10 @@ COPY infra/services/hive/metastore/conf/entrypoint.sh /opt/
 COPY infra/services/hive/metastore/conf/bootstrap.sh /opt/
 COPY infra/services/hive/metastore/conf/core-site.xml /opt/hadoop/etc/hadoop/
 COPY infra/services/hive/metastore/conf/metastore-site.xml /opt/hive-metastore/conf/
+
+# Certificate import
+COPY scripts/minio/selfsigned.crt /usr/local/share/ca-certificates/
+RUN update-ca-certificates
+RUN keytool -importcert -alias minio-ca -file /usr/local/share/ca-certificates/selfsigned.crt \
+    -keystore $JAVA_HOME/lib/security/cacerts \
+    -storepass changeit -noprompt
