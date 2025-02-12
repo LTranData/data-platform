@@ -15,7 +15,9 @@ with DAG(
     template_searchpath=Variable.get("template_searchpath")
 ) as dag:
     spark_job = SparkKubernetesOperator(
-        task_id='spark-job',
+        task_id="spark-job",
         application_file="spark/spark-write-minio.yaml",
-        namespace="data-platform"
+        namespace="data-platform",
+        kubernetes_conn_id="kubernetes_default",
+        do_xcom_push=True
     )
