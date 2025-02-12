@@ -16,6 +16,6 @@ with DAG(
 ) as dag:
     spark_job = SparkKubernetesOperator(
         task_id='spark-job',
-        application_file=f'{Variable.get("template_searchpath")}/spark/spark-write-minio.yaml',
+        application_file="spark/spark-write-minio.yaml",
         namespace="data-platform"
     )
