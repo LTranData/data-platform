@@ -8,13 +8,6 @@ POSTGRES_OPERATOR ?= bitnami/postgresql
 
 build-metastore-custom-dockerfile:
 	@set -ex; \
-	kubectl delete secret hive-metastore-secret --namespace $(NAMESPACE) || true; \
-	kubectl create secret generic hive-metastore-secret \
-		--from-literal=POSTGRES_URL=jdbc:postgresql://hive-metastore-postgres-postgresql.data-platform.svc.cluster.local:5432/metastore \
-		--from-literal=POSTGRES_USERNAME=postgres \
-		--from-literal=POSTGRES_PASSWORD=postgres \
-		--from-literal=S3_WAREHOUSE_DIR=s3a://hive-warehouse \
-		--namespace $(NAMESPACE); \
 	docker build --progress=plain \
 		-t lam1051999/hive-metastore-custom:3.0.0 \
 		-f infra/services/hive/metastore/Dockerfile .
@@ -27,6 +20,13 @@ build-schematool-custom-dockerfile:
 
 install:
 	@set -ex; \
+	kubectl delete secret hive-metastore-secret --namespace $(NAMESPACE) || true; \
+	kubectl create secret generic hive-metastore-secret \
+		--from-literal=POSTGRES_URL=jdbc:postgresql://hive-metastore-postgres-postgresql.data-platform.svc.cluster.local:5432/metastore \
+		--from-literal=POSTGRES_USERNAME=postgres \
+		--from-literal=POSTGRES_PASSWORD=postgres \
+		--from-literal=S3_WAREHOUSE_DIR=s3a://hive-warehouse \
+		--namespace $(NAMESPACE); \
 	helm upgrade --install --namespace $(NAMESPACE) \
 		hive-metastore-postgres $(POSTGRES_OPERATOR) \
 		--set global.postgresql.auth.postgresPassword=postgres \
