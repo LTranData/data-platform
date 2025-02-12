@@ -32,6 +32,7 @@ ADD https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.3/postgresql-4
 
 # For org.apache.hadoop.hive.ql.optimizer.ppr.PartitionExpressionForMetastore
 # ADD https://repo1.maven.org/maven2/org/apache/hive/hive-exec/3.0.0/hive-exec-3.0.0.jar /opt/hive-metastore/lib
+# For java.lang.NoSuchMethodError: com.google.common.base.Preconditions.checkArgument
 RUN rm /opt/apache-hive-metastore-$HIVE_METASTORE_VERSION-bin/lib/guava-19.0.jar && \
     cp /opt/hadoop-$HADOOP_VERSION/share/hadoop/hdfs/lib/guava-27.0-jre.jar /opt/apache-hive-metastore-$HIVE_METASTORE_VERSION-bin/lib/
 
