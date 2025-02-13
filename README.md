@@ -100,4 +100,8 @@ make -f scripts/hive/Makefile install
 # Port forward for Hive metastore database and thrift
 k port-forward service/hive-metastore-postgres-postgresql 5432 -n data-platform &
 k port-forward service/hive-metastore 9083 -n data-platform &
+
+# export HADOOP_ROOT_LOGGER=DEBUG,console && hadoop fs -ls s3a://hive-warehouse/
+# hadoop org.apache.hadoop.conf.Configuration
+# hdfs getconf -confKey [key]
 ```

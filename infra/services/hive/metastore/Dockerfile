@@ -1,4 +1,4 @@
-FROM openjdk:8-slim
+FROM openjdk:11-slim
 
 ARG HADOOP_VERSION=3.3.4
 ARG HIVE_METASTORE_VERSION=3.0.0
@@ -46,5 +46,5 @@ COPY infra/services/hive/metastore/conf/metastore-site.xml /opt/hive-metastore/c
 COPY scripts/minio/selfsigned.crt /usr/local/share/ca-certificates/
 RUN update-ca-certificates
 RUN keytool -importcert -alias minio-ca -file /usr/local/share/ca-certificates/selfsigned.crt \
-    -keystore $JAVA_HOME/jre/lib/security/cacerts \
+    -keystore $JAVA_HOME/lib/security/cacerts \
     -storepass changeit -noprompt
