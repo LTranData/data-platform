@@ -18,26 +18,21 @@ spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.attempts.maximum", "1"
 spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.connection.establish.timeout", "5000")
 spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.connection.timeout", "10000")
 
-# Create a simple DataFrame (replace with your data)
-data = [("Alice", 25), ("Bob", 30), ("Charlie", 28)]
-df = spark.createDataFrame(data, ["name", "age"])
-
 # Create a Hive table
-table_name = "my_hive_table"  # Choose your table name
+table_name = "delta_table"  # Choose your table name
 database_name = "default" # Choose your database name. Default is used if you don't specify one.
 
 spark.sql("CREATE DATABASE IF NOT EXISTS default").show()
 
-# Method 1: Using SQL syntax (Recommended for flexibility)
-spark.sql(f"CREATE TABLE IF NOT EXISTS {database_name}.{table_name} (name STRING, age INT) STORED AS ORC") # ORC is a good default format
-# ORC is a good default format. You can also use other formats like PARQUET, AVRO, etc.
-# IF NOT EXISTS clause ensures that the table is not recreated if it already exists.
+spark.sql(f"""
+  CREATE TABLE IF NOT EXISTS {database_name}.{table_name} (country STRING, continent STRING) USING delta
+""")
 
-# Insert data into the table
-df.write.mode("overwrite").insertInto(f"{database_name}.{table_name}") # Overwrite if the table already has data. Append if you want to add new data.
-
-# Method 2: Using DataFrame API (Less flexible, but sometimes simpler for basic cases)
-# df.write.mode("overwrite").saveAsTable(table_name) # This creates the table if it doesn't exist.
+spark.sql(f"""
+  INSERT INTO {database_name}.{table_name} VALUES
+      ('china', 'asia'),
+      ('argentina', 'south america')
+""")
 
 # Show all tables in the default database
 spark.sql("SHOW TABLES").show()
