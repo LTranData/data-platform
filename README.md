@@ -58,8 +58,14 @@ make -f scripts/spark/Makefile build-spark-application-dockerfile
 
 # Running a Spark application to write file to MinIO with Delta Lake table format
 make -f scripts/spark/Makefile build-spark-write-minio-dockerfile
-make -f scripts/spark/Makefile release-docker-images
 k apply -f pipeline/spark-write-minio/job.yaml
+
+# Create a Hive table to test Hive metastore
+make -f scripts/spark/Makefile build-spark-create-hive-table-dockerfile
+k apply -f pipeline/spark-create-hive-table/job.yaml
+
+# Release Docker images
+make -f scripts/spark/Makefile release-docker-images
 
 # Go to https://localhost:9443/browser/mybucket/user_data to view data files
 ```

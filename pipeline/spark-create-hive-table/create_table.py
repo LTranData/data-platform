@@ -26,13 +26,15 @@ df = spark.createDataFrame(data, ["name", "age"])
 table_name = "my_hive_table"  # Choose your table name
 database_name = "default" # Choose your database name. Default is used if you don't specify one.
 
+spark.sql("CREATE DATABASE IF NOT EXISTS default").show()
+
 # Method 1: Using SQL syntax (Recommended for flexibility)
 spark.sql(f"CREATE TABLE IF NOT EXISTS {database_name}.{table_name} (name STRING, age INT) STORED AS ORC") # ORC is a good default format
 # ORC is a good default format. You can also use other formats like PARQUET, AVRO, etc.
 # IF NOT EXISTS clause ensures that the table is not recreated if it already exists.
 
 # Insert data into the table
-df.write.mode("overwrite").insertInto(database_name, table_name) # Overwrite if the table already has data. Append if you want to add new data.
+df.write.mode("overwrite").insertInto(f"{database_name}.{table_name}") # Overwrite if the table already has data. Append if you want to add new data.
 
 # Method 2: Using DataFrame API (Less flexible, but sometimes simpler for basic cases)
 # df.write.mode("overwrite").saveAsTable(table_name) # This creates the table if it doesn't exist.
