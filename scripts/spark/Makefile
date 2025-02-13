@@ -4,7 +4,7 @@ NAMESPACE ?= data-platform
 SPARK_OPERATOR ?= spark-operator/spark-operator
 
 # Optional targets for specific components
-.PHONY: install uninstall build-spark-application-dockerfile build-spark-write-minio-dockerfile release-docker-images
+.PHONY: install uninstall build-spark-application-dockerfile build-spark-write-minio-dockerfile build-spark-create-hive-table-dockerfile release-docker-images
 
 install:
 	@set -ex; \
@@ -39,7 +39,14 @@ build-spark-write-minio-dockerfile:
 		--from-literal=AWS_REGION=us-east-1 \
 		--namespace $(NAMESPACE)
 
+build-spark-create-hive-table-dockerfile:
+	@set -ex; \
+	docker build --progress=plain \
+		-t lam1051999/spark-create-hive-table:3.5.3 \
+		-f pipeline/spark-create-hive-table/Dockerfile .
+
 release-docker-images:
 	@set -ex; \
 	docker push lam1051999/spark-application:3.5.3; \
-	docker push lam1051999/spark-write-minio:3.5.3
+	docker push lam1051999/spark-write-minio:3.5.3; \
+	docker push lam1051999/spark-create-hive-table:3.5.3
