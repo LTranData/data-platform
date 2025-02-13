@@ -1,7 +1,11 @@
 FROM openjdk:8-slim
 
-ARG HADOOP_VERSION=3.3.0
+ARG HADOOP_VERSION=3.3.4
 ARG HIVE_METASTORE_VERSION=3.0.0
+
+# Set necessary environment variables
+ENV HADOOP_HOME="/opt/hadoop"
+ENV PATH="/opt/spark/bin:/opt/hadoop/bin:${PATH}"
 
 RUN apt-get update && \
     apt-get install -y curl --no-install-recommends && \
@@ -17,10 +21,6 @@ RUN curl https://archive.apache.org/dist/hadoop/core/hadoop-$HADOOP_VERSION/hado
 # Add S3a jars to the classpath using this hack
 RUN ln -s /opt/hadoop/share/hadoop/tools/lib/hadoop-aws* /opt/hadoop/share/hadoop/common/lib/ && \
     ln -s /opt/hadoop/share/hadoop/tools/lib/aws-java-sdk* /opt/hadoop/share/hadoop/common/lib/
-
-# Set necessary environment variables
-ENV HADOOP_HOME="/opt/hadoop"
-ENV PATH="/opt/spark/bin:/opt/hadoop/bin:${PATH}"
 
 # Download and install the standalone metastore binary
 RUN curl https://archive.apache.org/dist/hive/hive-standalone-metastore-$HIVE_METASTORE_VERSION/hive-standalone-metastore-$HIVE_METASTORE_VERSION-bin.tar.gz | tar xvz -C /opt/ && \

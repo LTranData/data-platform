@@ -35,7 +35,7 @@ build-spark-write-minio-dockerfile:
 	kubectl create secret generic minio-secret \
 		--from-literal=AWS_ACCESS_KEY_ID=minio \
 		--from-literal=AWS_SECRET_ACCESS_KEY=minio123 \
-		--from-literal=ENDPOINT=https://myminio-hl.data-platform.svc.cluster.local:9000 \
+		--from-literal=ENDPOINT=https://minio.data-platform.svc.cluster.local:443 \
 		--from-literal=AWS_REGION=us-east-1 \
 		--namespace $(NAMESPACE)
 

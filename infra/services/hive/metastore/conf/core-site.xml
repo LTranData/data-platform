@@ -14,11 +14,9 @@
         <name>fs.s3a.path.style.access</name>
         <value>true</value>
     </property>
-    <!-- TODO: this should be `true` for secured connection, but somehow the application cannot pick up the Self-signed 
-    certificate even after the certificate imported to the server and $JAVA_HOME/jre/lib/security/cacerts cacert -->
     <property>
         <name>fs.s3a.connection.ssl.enabled</name>
-        <value>false</value>
+        <value>true</value>
     </property>
     <property>
         <name>fs.s3a.endpoint</name>
