@@ -60,10 +60,6 @@ make -f scripts/spark/Makefile build-spark-application-dockerfile
 make -f scripts/spark/Makefile build-spark-write-minio-dockerfile
 k apply -f pipeline/spark-write-minio/job.yaml
 
-# Create a Hive table to test Hive metastore
-make -f scripts/spark/Makefile build-spark-create-hive-table-dockerfile
-k apply -f pipeline/spark-create-hive-table/job.yaml
-
 # Release Docker images
 make -f scripts/spark/Makefile release-docker-images
 
@@ -110,4 +106,8 @@ k port-forward service/hive-metastore 9083 -n data-platform &
 # export HADOOP_ROOT_LOGGER=DEBUG,console && hadoop fs -ls s3a://hive-warehouse/
 # hadoop org.apache.hadoop.conf.Configuration
 # hdfs getconf -confKey [key]
+
+# Create a Hive table to test Hive metastore
+make -f scripts/spark/Makefile build-spark-create-hive-table-dockerfile
+k apply -f pipeline/spark-create-hive-table/job.yaml
 ```
