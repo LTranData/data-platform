@@ -34,4 +34,16 @@
         <name>fs.s3a.secret.key</name>
         <value>$S3_SECRET_KEY</value>
     </property>
+    <property>
+        <name>fs.s3a.attempts.maximum</name>
+        <value>1</value>
+    </property>
+    <property>
+        <name>fs.s3a.connection.establish.timeout</name>
+        <value>5000</value>
+    </property>
+    <property>
+        <name>fs.s3a.connection.timeout</name>
+        <value>10000</value>
+    </property>
 </configuration>
