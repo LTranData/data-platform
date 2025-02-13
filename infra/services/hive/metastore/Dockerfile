@@ -40,7 +40,6 @@ RUN rm /opt/apache-hive-metastore-$HIVE_METASTORE_VERSION-bin/lib/guava-19.0.jar
 COPY infra/services/hive/metastore/conf/entrypoint.sh /opt/
 COPY infra/services/hive/metastore/conf/bootstrap.sh /opt/
 COPY infra/services/hive/metastore/conf/core-site.xml /opt/hadoop/etc/hadoop/
-COPY infra/services/hive/metastore/conf/hive-site.xml /opt/hadoop/etc/hadoop/
 COPY infra/services/hive/metastore/conf/metastore-site.xml /opt/hive-metastore/conf/
 
 # Certificate import

@@ -4,7 +4,6 @@ set -ex
 
 SCRIPT_NAME="$(basename ${BASH_SOURCE[0]})"
 CORE_SITE="/opt/hadoop/etc/hadoop/core-site.xml"
-HIVE_SITE="/opt/hadoop/etc/hadoop/hive-site.xml"
 METASTORE_SITE="/opt/hive-metastore/conf/metastore-site.xml"
 
 function info {
@@ -21,5 +20,4 @@ _bootstrap_config() {
 }
 
 _bootstrap_config "$CORE_SITE"
-_bootstrap_config "$HIVE_SITE"
 _bootstrap_config "$METASTORE_SITE"
