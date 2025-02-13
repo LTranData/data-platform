@@ -87,8 +87,6 @@ k port-forward service/airflow-operator-webserver 8080 -n data-platform &
 
 ## Install Hive metastore
 
-Reference: https://christiaan-viljoen.medium.com/how-to-deploy-a-minimal-apache-hive-standalone-metastore-to-enable-delta-lake-support-for-trino-on-6b03964882a2
-
 ```bash
 # Download Postgres config
 curl -sLo infra/services/hive/database/values.yaml https://raw.githubusercontent.com/bitnami/charts/refs/heads/main/bitnami/postgresql/values.yaml
