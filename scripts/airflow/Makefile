@@ -2,6 +2,8 @@
 
 NAMESPACE ?= data-platform
 AIRFLOW_OPERATOR ?= apache-airflow/airflow
+WEBSERVER_SECRET_KEY ?=63c426f3362ccd39191fb77476845bae
+FERNET_KEY ?=DUqWeirPBeArHja24wrtiMH0idTjOf-Gs6xUPnhxxNc=
 
 # Optional targets for specific components
 .PHONY: build-custom-dockerfile install uninstall release-docker-images create-clusterrolebinding-for-spark-applications
@@ -16,7 +18,11 @@ install:
 	@set -ex; \
 	kubectl delete secret my-webserver-secret --namespace $(NAMESPACE) || true; \
 	kubectl create secret generic my-webserver-secret \
-		--from-literal="webserver-secret-key=$(python3 -c 'import secrets; print(secrets.token_hex(16))')" \
+		--from-literal="webserver-secret-key=$(WEBSERVER_SECRET_KEY)" \
+		--namespace $(NAMESPACE); \
+	kubectl delete secret airflow-fernet-key --namespace $(NAMESPACE) || true; \
+	kubectl create secret generic airflow-fernet-key \
+		--from-literal="fernet-key=$(FERNET_KEY)" \
 		--namespace $(NAMESPACE); \
 	helm upgrade --install --namespace $(NAMESPACE) \
 		airflow-operator $(AIRFLOW_OPERATOR) \
@@ -35,7 +41,8 @@ install:
 		--set images.airflow.repository=lam1051999/airflow-custom \
 		--set images.airflow.tag=2.10.5 \
 		--set webserver.defaultUser.username=admin \
-		--set webserver.defaultUser.password=admin
+		--set webserver.defaultUser.password=admin \
+		--set fernetKeySecretName=airflow-fernet-key
 
 uninstall:
 	@set -ex; \
