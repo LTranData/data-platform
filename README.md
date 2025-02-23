@@ -109,3 +109,32 @@ k port-forward service/hive-metastore 9083 -n data-platform &
 make -f scripts/spark/Makefile build-spark-create-hive-table-dockerfile
 k apply -f pipeline/spark-create-hive-table/job.yaml
 ```
+
+## Install Kafka
+
+```bash
+# Download Kafka config
+curl -sLo infra/services/kafka/operator/values.yaml https://raw.githubusercontent.com/bitnami/charts/refs/heads/main/bitnami/kafka/values.yaml
+
+# Install Kafka
+make -f scripts/kafka/Makefile generate-self-signed-cert-keystore-truststore
+make -f scripts/kafka/Makefile register-self-signed-cert-keystore-truststore
+make -f scripts/kafka/Makefile install
+
+# Port forward for Kafka service
+k port-forward service/kafka-operator 9092 -n data-platform &
+
+# Create a client pod for accessing Kafka cluster data
+make -f scripts/kafka/Makefile create-kafka-client-pod
+kafka-console-producer.sh \
+    --producer.config /tmp/client.properties \
+    --bootstrap-server kafka-operator.data-platform.svc.cluster.local:9092 \
+    --topic test
+
+# Consume those messages
+kafka-console-consumer.sh \
+    --consumer.config /tmp/client.properties \
+    --bootstrap-server kafka-operator.data-platform.svc.cluster.local:9092 \
+    --topic test \
+    --from-beginning
+```
