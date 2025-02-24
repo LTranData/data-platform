@@ -138,3 +138,18 @@ kafka-console-consumer.sh \
     --topic test \
     --from-beginning
 ```
+
+## Install sources
+
+This is the installation of source systems with databases so that we can integrate the CDC from these to our datalake with Kafka Connector
+
+```bash
+# Install Postgres source
+make -f scripts/sources/Makefile install-postgres
+```
+
+## Install Kafka Connect
+
+```bash
+make -f scripts/kafka-connect/Makefile install
+```
