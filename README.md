@@ -137,6 +137,12 @@ kafka-console-consumer.sh \
     --bootstrap-server kafka-operator.data-platform.svc.cluster.local:9092 \
     --topic test \
     --from-beginning
+
+# List Kafka topics
+kafka-topics.sh \
+    --command-config /tmp/client.properties \
+    --bootstrap-server kafka-operator.data-platform.svc.cluster.local:9092 \
+    --list
 ```
 
 ## Install sources
@@ -146,10 +152,23 @@ This is the installation of source systems with databases so that we can integra
 ```bash
 # Install Postgres source
 make -f scripts/sources/Makefile install-postgres
+
+# Port forward for Postgres source
+k port-forward service/postgres-source-postgresql 5432 -n data-platform &
 ```
 
 ## Install Kafka Connect
 
 ```bash
 make -f scripts/kafka-connect/Makefile install
+
+# Port forward for Kafka Connect REST endpoint
+k port-forward service/kafka-connect-operator-cp-kafka-connect 8083 -n data-platform &
+
+# List all installed plugins
+curl -sS localhost:8083/connector-plugins
+
+# Create Postgres connector
+make -f scripts/kafka-connect/Makefile create-postgres-connector
+make -f scripts/kafka-connect/Makefile get-all-connectors
 ```

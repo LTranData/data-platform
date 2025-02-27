@@ -3,7 +3,7 @@
 NAMESPACE ?= data-platform
 
 # Optional targets for specific components
-.PHONY: install uninstall build-custom-dockerfile
+.PHONY: install uninstall build-custom-dockerfile list-plugins create-postgres-connector
 
 build-custom-dockerfile:
 	@set -ex; \
@@ -26,6 +26,7 @@ install:
 		--set configurationOverrides.ssl\\.keystore\\.type=JKS \
 		--set configurationOverrides.ssl\\.keystore\\.location=/usr/share/confluent-hub-components/kafka.keystore.jks \
 		--set configurationOverrides.ssl\\.keystore\\.password=changeit \
+		--set configurationOverrides.connector\\.client\\.config\\.override\\.policy=All \
 		--set kafka.bootstrapServers=SASL_SSL://kafka-operator.data-platform.svc.cluster.local:9092 \
 		--set image=lam1051999/kafka-connect-custom \
 		--set imageTag=7.9.0
@@ -34,3 +35,23 @@ uninstall:
 	@set -ex; \
 	helm uninstall --namespace $(NAMESPACE) \
 		kafka-connect-operator
+
+list-plugins:
+	@set -ex; \
+	curl -sS localhost:8083/connector-plugins
+
+create-postgres-connector:
+	@set -ex; \
+	curl -i -X POST \
+		-H "Accept:application/json" \
+		-H  "Content-Type:application/json" \
+		http://localhost:8083/connectors/ -d @scripts/kafka-connect/postgres-connector.json
+
+delete-postgres-connector:
+	@set -ex; \
+	curl -i -X DELETE \
+		http://localhost:8083/connectors/inventory-connector
+
+get-all-connectors:
+	@set -ex; \
+	curl -i -X GET http://localhost:8083/connectors/
