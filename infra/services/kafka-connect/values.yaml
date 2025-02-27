@@ -6,8 +6,8 @@ replicaCount: 1
 
 ## Image Info
 ## ref: https://hub.docker.com/r/confluentinc/cp-kafka/
-image: lam1051999/kafka-connect-custom
-imageTag: 7.9.0
+image: confluentinc/cp-kafka-connect
+imageTag: 6.1.0
 
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -24,17 +24,8 @@ servicePort: 8083
 ## ref: https://docs.confluent.io/current/connect/userguide.html#configuring-workers
 configurationOverrides:
   "plugin.path": "/usr/share/java,/usr/share/confluent-hub-components"
-  "key.converter": "org.apache.kafka.connect.json.JsonConverter"
-  "value.converter": "org.apache.kafka.connect.json.JsonConverter"
-  "security.protocol": "SASL_SSL"
-  "sasl.mechanism": "SCRAM-SHA-512"
-  "sasl.jaas.config": "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"brokerUser\" password=\"brokerPassword\";"
-  "ssl.truststore.type": "JKS"
-  "ssl.truststore.location": "/usr/share/confluent-hub-components/kafka.truststore.jks"
-  "ssl.truststore.password": "changeit"
-  "ssl.keystore.type": "JKS"
-  "ssl.keystore.location": "/usr/share/confluent-hub-components/kafka.keystore.jks"
-  "ssl.keystore.password": "changeit"
+  "key.converter": "io.confluent.connect.avro.AvroConverter"
+  "value.converter": "io.confluent.connect.avro.AvroConverter"
   "key.converter.schemas.enable": "false"
   "value.converter.schemas.enable": "false"
   "internal.key.converter": "org.apache.kafka.connect.json.JsonConverter"
@@ -103,7 +94,7 @@ prometheus:
 ## You can list load balanced service endpoint, or list of all brokers (which is hard in K8s).  e.g.:
 ## bootstrapServers: "PLAINTEXT://dozing-prawn-kafka-headless:9092"
 kafka:
-  bootstrapServers: "SASL_SSL://kafka-operator.data-platform.svc.cluster.local:9092"
+  bootstrapServers: ""
 
 ## If the Kafka Chart is disabled a URL and port are required to connect
 ## e.g. gnoble-panther-cp-schema-registry:8081
