@@ -1,4 +1,4 @@
-# Cloud Native Data Platform
+# Data Platform
 
 ## Table of Contents
 
