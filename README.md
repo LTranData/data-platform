@@ -1,11 +1,43 @@
-# data-platform
+# Cloud Native Data Platform
+
+## Table of Contents
+
+* [Overview](#overview)
+* [Architecture](#architecture)
+* [Getting Started](#getting-started)
+    * [Install MinIO](#install-minio)
+    * [Install Spark Cluster](#install-spark-cluster)
+    * [Install Airflow](#install-airflow)
+    * [Install Hive Metastore](#install-hive-metastore)
+    * [Install Kafka](#install-kafka)
+    * [Install Sources](#install-sources)
+    * [Install Kafka Connect](#install-kafka-connect)
+* [License](#license)
+
+## Overview
+
+This platform leverages cloud-native technologies to build a flexible and efficient data pipeline. It supports various data ingestion, processing, and storage needs, enabling real-time and batch data analytics. The architecture is designed to handle structured, semi-structured, and unstructured data from diverse external sources.
+
+## Architecture
+
+![Data Platform Architecture](./architecture.jpg)
+
+The platform is organized into distinct layers:
+
+* **Ingestion Layer:** Captures data from external sources using Debezium for streaming and Spark for batch.
+* **Storage Layer:** Stores streaming data in Kafka and streaming/batch data in MinIO, there is a Hive metastore on top of the object storage with Delta Lake tables.
+* **Transformation Layer:** Transforms and processes data using Spark, Trino, and dbt.
+* **Provisioning Layer:** Expose data for multiple downstream applications through various connectors.
+* **Service Layer:** Resource management, orchestration, data governance, and monitoring.
+
+## Getting Started
 
 ```bash
 # Create Kubernetes namespace
 k create namespace data-platform
 ```
 
-## Install MinIO
+### Install MinIO
 
 ```bash
 # Add repository
@@ -41,7 +73,7 @@ mc mb myminio/mybucket --insecure
 mc mb myminio/hive-warehouse --insecure
 ```
 
-## Install Spark cluster
+### Install Spark cluster
 
 ```bash
 # Add repository
@@ -66,7 +98,7 @@ make -f scripts/spark/Makefile release-docker-images
 # Go to https://localhost:9443/browser/mybucket/user_data to view data files
 ```
 
-## Install Airflow
+### Install Airflow
 
 ```bash
 helm repo add apache-airflow https://airflow.apache.org
@@ -85,7 +117,7 @@ make -f scripts/airflow/Makefile install
 k port-forward service/airflow-operator-webserver 8080 -n data-platform &
 ```
 
-## Install Hive metastore
+### Install Hive metastore
 
 ```bash
 # Download Postgres config
@@ -110,7 +142,7 @@ make -f scripts/spark/Makefile build-spark-create-hive-table-dockerfile
 k apply -f pipeline/spark-create-hive-table/job.yaml
 ```
 
-## Install Kafka
+### Install Kafka
 
 ```bash
 # Download Kafka config
@@ -145,7 +177,7 @@ kafka-topics.sh \
     --list
 ```
 
-## Install sources
+### Install sources
 
 This is the installation of source systems with databases so that we can integrate the CDC from these to our datalake with Kafka Connector
 
@@ -157,7 +189,7 @@ make -f scripts/sources/Makefile install-postgres
 k port-forward service/postgres-source-postgresql 5432 -n data-platform &
 ```
 
-## Install Kafka Connect
+### Install Kafka Connect
 
 ```bash
 make -f scripts/kafka-connect/Makefile install
@@ -172,3 +204,7 @@ curl -sS localhost:8083/connector-plugins
 make -f scripts/kafka-connect/Makefile create-postgres-connector
 make -f scripts/kafka-connect/Makefile get-all-connectors
 ```
+
+## License
+
+This project is licensed under the [Apache License](LICENSE).
