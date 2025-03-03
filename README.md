@@ -48,10 +48,10 @@ helm repo update
 # Install client
 brew install minio/stable/mc
 
-# Download operator config
+# Download operator config for reference
 curl -sLo infra/services/minio/operator/values.yaml https://raw.githubusercontent.com/minio/operator/master/helm/operator/values.yaml
 
-# Download tenant config
+# Download tenant config for reference
 curl -sLo infra/services/minio/tenant/values.yaml https://raw.githubusercontent.com/minio/operator/master/helm/tenant/values.yaml
 # Make sure you configure `externalCertSecret` and `requestAutoCert` so that the server use Self-signed certificate instead of auto-generated certificate
 
@@ -81,7 +81,7 @@ helm repo add spark-operator https://kubeflow.github.io/spark-operator
 helm search repo spark-operator
 helm repo update
 
-# Download Spark config
+# Download Spark config for reference
 curl -sLo infra/services/spark/values.yaml https://raw.githubusercontent.com/kubeflow/spark-operator/refs/heads/master/charts/spark-operator-chart/values.yaml
 
 # Install Spark Operator and build Spark application base image
@@ -105,7 +105,7 @@ helm repo add apache-airflow https://airflow.apache.org
 helm search repo apache-airflow
 helm repo update
 
-# Download Airflow config
+# Download Airflow config for reference
 curl -sLo infra/services/airflow/operator/values.yaml https://raw.githubusercontent.com/apache/airflow/refs/heads/main/chart/values.yaml
 
 # Install Airflow Operator
@@ -120,7 +120,7 @@ k port-forward service/airflow-operator-webserver 8080 -n data-platform &
 ### Install Hive metastore
 
 ```bash
-# Download Postgres config
+# Download Postgres config for reference
 curl -sLo infra/services/hive/database/values.yaml https://raw.githubusercontent.com/bitnami/charts/refs/heads/main/bitnami/postgresql/values.yaml
 
 # Install Hive metastore
@@ -145,7 +145,7 @@ k apply -f pipeline/spark-create-hive-table/job.yaml
 ### Install Kafka
 
 ```bash
-# Download Kafka config
+# Download Kafka config for reference
 curl -sLo infra/services/kafka/operator/values.yaml https://raw.githubusercontent.com/bitnami/charts/refs/heads/main/bitnami/kafka/values.yaml
 
 # Install Kafka
@@ -203,6 +203,26 @@ curl -sS localhost:8083/connector-plugins
 # Create Postgres connector
 make -f scripts/kafka-connect/Makefile create-postgres-connector
 make -f scripts/kafka-connect/Makefile get-all-connectors
+```
+
+### Install Trino
+
+```bash
+# Add repository
+helm repo add trino https://trinodb.github.io/charts
+helm search repo trino
+helm repo update
+
+# Download operator config for reference
+curl -sLo infra/services/trino/operator/values.yaml https://raw.githubusercontent.com/trinodb/charts/refs/heads/main/charts/trino/values.yaml
+
+# Install Trino
+make -f scripts/trino/Makefile build-trino-custom-dockerfile
+make -f scripts/trino/Makefile release-docker-images
+make -f scripts/trino/Makefile install
+
+# Port forward for Trino
+k port-forward service/trino-operator-trino 8089:8080 -n data-platform &
 ```
 
 ## License
