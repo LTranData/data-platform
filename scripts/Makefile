@@ -18,11 +18,11 @@ install:
 
 uninstall:
 	@set -ex; \
-	make -f scripts/minio/Makefile uninstall; \
-	make -f scripts/spark/Makefile uninstall; \
-	make -f scripts/airflow/Makefile uninstall; \
-	make -f scripts/hive/Makefile uninstall; \
-	make -f scripts/kafka/Makefile uninstall; \
-	make -f scripts/sources/Makefile uninstall-postgres; \
-	make -f scripts/kafka-connect/Makefile uninstall; \
-	make -f scripts/trino/Makefile uninstall
+	make -f scripts/minio/Makefile uninstall || true; \
+	make -f scripts/spark/Makefile uninstall || true; \
+	make -f scripts/airflow/Makefile uninstall || true; \
+	make -f scripts/hive/Makefile uninstall || true; \
+	make -f scripts/kafka/Makefile uninstall || true; \
+	make -f scripts/sources/Makefile uninstall-postgres || true; \
+	make -f scripts/kafka-connect/Makefile uninstall || true; \
+	make -f scripts/trino/Makefile uninstall || true
