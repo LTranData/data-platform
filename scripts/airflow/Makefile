@@ -11,7 +11,7 @@ FERNET_KEY ?=DUqWeirPBeArHja24wrtiMH0idTjOf-Gs6xUPnhxxNc=
 build-custom-dockerfile:
 	@set -ex; \
 	docker build --progress=plain \
-		-t lam1051999/airflow-custom:2.10.5 \
+		-t LTranData/airflow-custom:2.10.5 \
 		-f infra/services/airflow/operator/Dockerfile .
 
 install:
@@ -28,7 +28,7 @@ install:
 		airflow-operator $(AIRFLOW_OPERATOR) \
 		--set dags.persistence.enabled=false \
 		--set dags.gitSync.enabled=true \
-		--set dags.gitSync.repo=https://github.com/lam1051999/data-platform \
+		--set dags.gitSync.repo=https://github.com/LTranData/data-platform \
 		--set dags.gitSync.branch=main \
 		--set dags.gitSync.subPath=pipeline/airflow \
 		--set pgbouncer.enabled=true \
@@ -38,7 +38,7 @@ install:
 		--set triggerer.safeToEvict=true \
 		--set dagProcessor.safeToEvict=true \
 		--set redis.safeToEvict=true \
-		--set images.airflow.repository=lam1051999/airflow-custom \
+		--set images.airflow.repository=LTranData/airflow-custom \
 		--set images.airflow.tag=2.10.5 \
 		--set webserver.defaultUser.username=admin \
 		--set webserver.defaultUser.password=admin \
@@ -51,7 +51,7 @@ uninstall:
 
 release-docker-images:
 	@set -ex; \
-	docker push lam1051999/airflow-custom:2.10.5
+	docker push LTranData/airflow-custom:2.10.5
 
 create-clusterrolebinding-for-spark-applications:
 	@set -ex; \

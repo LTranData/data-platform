@@ -9,7 +9,7 @@ TRINO_OPERATOR ?= trino/trino
 build-trino-custom-dockerfile:
 	@set -ex; \
 	docker build --progress=plain \
-		-t lam1051999/trino-custom:470 \
+		-t LTranData/trino-custom:470 \
 		-f infra/services/trino/operator/Dockerfile .
 
 install:
@@ -25,4 +25,4 @@ uninstall:
 
 release-docker-images:
 	@set -ex; \
-	docker push lam1051999/trino-custom:470
+	docker push LTranData/trino-custom:470

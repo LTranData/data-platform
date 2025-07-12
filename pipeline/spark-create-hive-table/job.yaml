@@ -10,7 +10,7 @@ spec:
   type: Python
   pythonVersion: "3"
   mode: cluster
-  image: lam1051999/spark-create-hive-table:3.5.3
+  image: LTranData/spark-create-hive-table:3.5.3
   imagePullPolicy: IfNotPresent
   mainApplicationFile: local:///app/create_table.py
   sparkVersion: 3.5.3

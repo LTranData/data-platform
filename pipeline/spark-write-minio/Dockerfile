@@ -1,4 +1,4 @@
-FROM lam1051999/spark-application:3.5.3
+FROM LTranData/spark-application:3.5.3
 
 USER root
 WORKDIR /app

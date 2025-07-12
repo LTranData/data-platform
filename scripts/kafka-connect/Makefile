@@ -8,7 +8,7 @@ NAMESPACE ?= data-platform
 build-custom-dockerfile:
 	@set -ex; \
 	docker build --progress=plain \
-		-t lam1051999/kafka-connect-custom:7.9.0 \
+		-t LTranData/kafka-connect-custom:7.9.0 \
 		-f infra/services/kafka-connect/Dockerfile .
 
 install:
@@ -28,7 +28,7 @@ install:
 		--set configurationOverrides.ssl\\.keystore\\.password=changeit \
 		--set configurationOverrides.connector\\.client\\.config\\.override\\.policy=All \
 		--set kafka.bootstrapServers=SASL_SSL://kafka-operator.data-platform.svc.cluster.local:9092 \
-		--set image=lam1051999/kafka-connect-custom \
+		--set image=LTranData/kafka-connect-custom \
 		--set imageTag=7.9.0
 
 uninstall:

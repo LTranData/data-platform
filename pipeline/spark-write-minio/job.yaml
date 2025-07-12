@@ -10,7 +10,7 @@ spec:
   type: Python
   pythonVersion: "3"
   mode: cluster
-  image: lam1051999/spark-write-minio:3.5.3
+  image: LTranData/spark-write-minio:3.5.3
   imagePullPolicy: IfNotPresent
   mainApplicationFile: local:///app/generate_data.py
   sparkVersion: 3.5.3

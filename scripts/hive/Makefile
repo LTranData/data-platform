@@ -9,13 +9,13 @@ POSTGRES_OPERATOR ?= bitnami/postgresql
 build-metastore-custom-dockerfile:
 	@set -ex; \
 	docker build --progress=plain \
-		-t lam1051999/hive-metastore-custom:3.0.0 \
+		-t LTranData/hive-metastore-custom:3.0.0 \
 		-f infra/services/hive/metastore/Dockerfile .
 
 build-schematool-custom-dockerfile:
 	@set -ex; \
 	docker build --progress=plain \
-		-t lam1051999/hive-schematool-custom:4.0.0 \
+		-t LTranData/hive-schematool-custom:4.0.0 \
 		-f infra/services/hive/schematool/Dockerfile .
 
 install:
@@ -45,5 +45,5 @@ uninstall:
 
 release-docker-images:
 	@set -ex; \
-	docker push lam1051999/hive-metastore-custom:3.0.0; \
-	docker push lam1051999/hive-schematool-custom:4.0.0
+	docker push LTranData/hive-metastore-custom:3.0.0; \
+	docker push LTranData/hive-schematool-custom:4.0.0

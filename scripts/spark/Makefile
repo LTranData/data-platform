@@ -22,14 +22,14 @@ build-spark-application-dockerfile:
 	export EXISTING_PWD=$(pwd); \
 	cd $(SPARK_HOME); \
 	docker build --progress=plain \
-		-t lam1051999/spark-application:3.5.3 \
+		-t LTranData/spark-application:3.5.3 \
 		-f kubernetes/dockerfiles/spark/Dockerfile .; \
 	cd $(EXISTING_PWD)
 
 build-spark-write-minio-dockerfile:
 	@set -ex; \
 	docker build --progress=plain \
-		-t lam1051999/spark-write-minio:3.5.3 \
+		-t LTranData/spark-write-minio:3.5.3 \
 		-f pipeline/spark-write-minio/Dockerfile .; \
 	kubectl delete secret minio-secret --namespace $(NAMESPACE) || true; \
 	kubectl create secret generic minio-secret \
@@ -42,11 +42,11 @@ build-spark-write-minio-dockerfile:
 build-spark-create-hive-table-dockerfile:
 	@set -ex; \
 	docker build --progress=plain \
-		-t lam1051999/spark-create-hive-table:3.5.3 \
+		-t LTranData/spark-create-hive-table:3.5.3 \
 		-f pipeline/spark-create-hive-table/Dockerfile .
 
 release-docker-images:
 	@set -ex; \
-	docker push lam1051999/spark-application:3.5.3; \
-	docker push lam1051999/spark-write-minio:3.5.3; \
-	docker push lam1051999/spark-create-hive-table:3.5.3
+	docker push LTranData/spark-application:3.5.3; \
+	docker push LTranData/spark-write-minio:3.5.3; \
+	docker push LTranData/spark-create-hive-table:3.5.3

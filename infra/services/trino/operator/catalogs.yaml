@@ -1,5 +1,5 @@
 image:
-  repository: lam1051999/trino-custom
+  repository: LTranData/trino-custom
   tag: 470
   pullPolicy: IfNotPresent
 
