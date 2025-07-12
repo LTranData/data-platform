@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: hive-metastore
-          image: lam1051999/hive-metastore-custom:3.0.0
+          image: LTranData/hive-metastore-custom:3.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9083
